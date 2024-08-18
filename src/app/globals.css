@@ -1,0 +1,134 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global styles */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #4b5563 #1f2937;
+}
+
+/* For WebKit browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(31, 41, 55, 0.5); /* Dark background with transparency */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #4b5563; /* Slightly lighter gray for the thumb */
+  border-radius: 10px;
+  border: 2px solid transparent; /* Adds space around the thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #9ca3af; /* Lighter shade on hover */
+}
+
+.flashcard {
+  perspective: 1000px; /* Create 3D space for the flip */
+}
+
+.front,
+.back {
+  backface-visibility: hidden; /* Hide the back face initially */
+  transition: transform 0.6s; /* Smooth transition */
+  transform-style: preserve-3d; /* Maintain 3D structure during transform */
+}
+
+.front {
+  transform: rotateY(0deg); /* Front face is visible by default */
+  z-index: 2; /* Ensure front is on top when not flipped */
+}
+
+.back {
+  transform: rotateY(180deg); /* Back face is initially hidden */
+}
+
+.flashcard.flipped .front {
+  transform: rotateY(-180deg); /* Flip the front face */
+}
+
+.flashcard.flipped .back {
+  transform: rotateY(0deg); /* Show the back face */
+}
+
+.bg-big {
+  background: url("../../public/bigBg.png");
+  background-repeat: no-repeat;
+  position: relative;
+  background-size: cover;
+}
+
+.animate-float1 {
+  animation: float1 8s ease-in-out infinite;
+}
+
+.animate-float2 {
+  animation: float2 10s ease-in-out infinite;
+}
+
+.animate-float3 {
+  animation: float3 12s ease-in-out infinite;
+}
+
+@keyframes float1 {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes float2 {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(30px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes float3 {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-40px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-sailing {
+  animation: sailing 5s ease-in-out infinite; /* Adjust duration as needed */
+}
+
+@keyframes sailing {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-5px) rotate(-2deg);
+  }
+  50% {
+    transform: translateY(0) rotate(0deg);
+  }
+  75% {
+    transform: translateY(5px) rotate(2deg);
+  }
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+}
