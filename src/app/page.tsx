@@ -9,7 +9,7 @@ export default function LandingPage() {
 
   const handleSubmit = () => {
     console.log('this has been clicked')
-    event.preventDefault();
+  
     setShowPopup(true);
   };
 
