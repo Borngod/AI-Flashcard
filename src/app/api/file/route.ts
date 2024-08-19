@@ -3,13 +3,15 @@ import fs from "fs";
 import { parseOfficeAsync } from "officeparser";
 import os from "os";
 
+// Use the system's temp directory provided by Vercel
+const tempDir = os.tmpdir();
+
 export async function POST(req: NextRequest) {
   console.log("API route /api/upload was hit");
 
   try {
     // Parse the formData from the request body
     const formData = await req.formData();
-
     const file = formData.get("file");
 
     // Check if file exists and is of correct type
@@ -20,8 +22,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Create a temporary file path
-    const tempFilePath = `${os.tmpdir()}/${file.name}`;
+    // Create a temporary file path in the temp directory
+    const tempFilePath = `${tempDir}/${file.name}`;
 
     try {
       // Read the file's data as an ArrayBuffer

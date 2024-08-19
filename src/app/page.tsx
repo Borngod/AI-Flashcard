@@ -8,8 +8,8 @@ export default function LandingPage() {
   const [showPopup, setShowPopup] = useState(false);
 
   const handleSubmit = () => {
-    console.log('this has been clicked')
-  
+    console.log("this has been clicked");
+
     setShowPopup(true);
   };
 
