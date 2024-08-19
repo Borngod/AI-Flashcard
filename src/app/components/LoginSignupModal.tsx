@@ -1,5 +1,5 @@
-"use client"
-import { useState } from "react";
+"use client";
+import { useState, useEffect, FormEvent } from "react";
 import Modal from "react-modal";
 import {
   useCreateUserWithEmailAndPassword,
@@ -9,56 +9,64 @@ import { auth } from "@/app/firebase/config.js";
 import { useRouter } from "next/navigation";
 import { FaSpinner } from "react-icons/fa";
 
-export default function LoginSignupModal({ isOpen, onClose }) {
+interface LoginSignupModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const LoginSignupModal: React.FC<LoginSignupModalProps> = ({ isOpen, onClose }) => {
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // Rename one of the 'loading' variables to avoid conflict
-  const [createUserWithEmailAndPassword, user, isCreatingUser, signUpError] =
-    useCreateUserWithEmailAndPassword(auth);
-  const [signInWithEmailAndPassword, _, isSigningIn, signInError] =
-    useSignInWithEmailAndPassword(auth);
+  const [
+    createUserWithEmailAndPassword,
+    createdUser,
+    isCreatingUser,
+    signUpError,
+  ] = useCreateUserWithEmailAndPassword(auth);
+  const [
+    signInWithEmailAndPassword,
+    signedInUser,
+    isSigningIn,
+    signInError,
+  ] = useSignInWithEmailAndPassword(auth);
 
-  const [formError, setFormError] = useState(null);
+  const [formError, setFormError] = useState<string | null>(null);
   const router = useRouter();
 
-  // Combine loading states for a unified loading indicator
-  const loading = isCreatingUser || isSigningIn; 
+  // Combine loading states
+  const loading = isCreatingUser || isSigningIn;
 
-  const handleFormSubmit = async (event) => {
+  // Automatically redirect on successful sign-in or sign-up
+  useEffect(() => {
+    if (signedInUser || createdUser) {
+      onClose(); // Close the modal instantly
+      router.push("/flashcard"); // Redirect to flashcard page
+    }
+  }, [signedInUser, createdUser, router, onClose]);
+
+  const handleFormSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    setFormError(null); 
+    setFormError(null); // Clear previous errors
 
     // Basic input validation
     if (!email || !password) {
       setFormError("Please fill in all fields.");
-      return; 
+      return;
     }
 
     if (isLoginMode) {
       try {
-        // Introduce a delay to showcase the preloader (optional)
-        await new Promise((resolve) => setTimeout(resolve, 500)); 
-
         await signInWithEmailAndPassword(email, password);
-        setEmail("");
-        setPassword("");
-        router.push("/flashcard"); 
-      } catch (e) {
+      } catch (e: any) {
         console.error("Firebase signin error:", e);
-        setFormError(e.message); 
+        setFormError(e.message);
       }
     } else {
       try {
-        // Introduce a delay to showcase the preloader (optional)
-        await new Promise((resolve) => setTimeout(resolve, 500)); 
-
         await createUserWithEmailAndPassword(email, password);
-        setEmail("");
-        setPassword("");
-        router.push("/flashcard");
-      } catch (e) {
+      } catch (e: any) {
         console.error("Firebase signup error:", e);
         setFormError(e.message);
       }
@@ -76,10 +84,9 @@ export default function LoginSignupModal({ isOpen, onClose }) {
         {isLoginMode ? "Welcome Back!" : "Create an Account"}
       </h2>
 
-      {/* Loading indicator with FaSpinner */}
       {loading && (
         <div className="flex justify-center items-center mb-4">
-          <FaSpinner className="animate-spin h-8 w-8 text-blue-500" /> 
+          <FaSpinner className="animate-spin h-8 w-8 text-blue-500" />
         </div>
       )}
 
@@ -115,12 +122,11 @@ export default function LoginSignupModal({ isOpen, onClose }) {
             id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" 
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
             required
           />
         </div>
 
-        {/* Conditional rendering for signup mode */}
         {isLoginMode && (
           <div className="mb-4 text-right">
             <a
@@ -155,4 +161,6 @@ export default function LoginSignupModal({ isOpen, onClose }) {
       </form>
     </Modal>
   );
-}
+};
+
+export default LoginSignupModal;
