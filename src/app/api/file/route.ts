@@ -3,8 +3,8 @@ import fs from "fs";
 import { parseOfficeAsync } from "officeparser";
 import os from "os";
 
-// Use the system's temp directory provided by Vercel
-const tempDir = os.tmpdir();
+// Use the system's temp directory provided by Vercel or local system
+const tempDir = os.tmpdir() + "/officeParserTemp/tempfiles";
 
 export async function POST(req: NextRequest) {
   console.log("API route /api/upload was hit");
@@ -22,13 +22,18 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Ensure the required directories exist
+    if (!fs.existsSync(tempDir)) {
+      fs.mkdirSync(tempDir, { recursive: true }); // Create the required temp directory structure
+    }
+
     // Create a temporary file path in the temp directory
     const tempFilePath = `${tempDir}/${file.name}`;
 
     try {
       // Read the file's data as an ArrayBuffer
       const fileData = await file.arrayBuffer();
-      fs.writeFileSync(tempFilePath, new Uint8Array(Buffer.from(fileData))); 
+      fs.writeFileSync(tempFilePath, new Uint8Array(Buffer.from(fileData)));
 
       try {
         // Extract text from the file
