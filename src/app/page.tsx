@@ -7,7 +7,8 @@ export default function LandingPage() {
   const [email, setEmail] = useState("");
   const [showPopup, setShowPopup] = useState(false);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = () => {
+    console.log('this has been clicked')
     event.preventDefault();
     setShowPopup(true);
   };
@@ -129,7 +130,7 @@ export default function LandingPage() {
             achieve more.
           </p>
           <button
-            onClick={()=>handleSubmit}
+            onClick={handleSubmit}
             className="py-3 sm:py-4 px-6 sm:px-8 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-bold text-lg sm:text-xl shadow-lg transition duration-300"
           >
             Get Started Now
