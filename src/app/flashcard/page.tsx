@@ -77,7 +77,9 @@ export default function FlashcardsGenerator() {
 
   const [currentPage, setCurrentPage] = useState(0); // New state for current page
 
-  const [collections, setCollections] = useState<{ id: string; [key: string]: any }[]>([]);
+  const [collections, setCollections] = useState<
+    { id: string; [key: string]: any }[]
+  >([]);
   const [selectedCollection, setSelectedCollection] = useState(null);
 
   const [user] = useAuthState(auth);
@@ -148,6 +150,7 @@ export default function FlashcardsGenerator() {
 
   const handleSpeak = () => {
     if (synthRef.current && flashcards.length > 0) {
+      console.log(flashcards[currentPage].question, "the flashcards");
       const utterance = new SpeechSynthesisUtterance(
         flashcards[currentPage].question
       );
@@ -201,9 +204,11 @@ export default function FlashcardsGenerator() {
 
           return { question, answer };
         })
-        .filter((pair): pair is { question: string; answer: string } => pair !== null); // Explicit type guard
+        .filter(
+          (pair): pair is { question: string; answer: string } => pair !== null
+        ); // Explicit type guard
 
-    setFlashcards(flashcardPairs as { question: string; answer: string }[]); // Type assertion for extra safety
+      setFlashcards(flashcardPairs as { question: string; answer: string }[]); // Type assertion for extra safety
     } catch (error) {
       console.error("Error generating flashcards:", error);
       setError("An error occurred while generating flashcards.");
@@ -394,7 +399,7 @@ export default function FlashcardsGenerator() {
                 <div className="font-bold text-3xl text-center mb-4 md:text-2xl sm:text-xl">
                   Answer:
                 </div>
-                <div className="text-xl text-center md:text-lg sm:text-base">
+                <div className="text-base text-center md:text-base sm:text-base overflow-y-scroll relative">
                   {flashcards[currentPage].answer}
                 </div>
               </div>
