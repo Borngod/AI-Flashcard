@@ -394,7 +394,7 @@ export default function FlashcardsGenerator() {
                 <div className="font-bold text-3xl text-center mb-4 md:text-2xl sm:text-xl">
                   Answer:
                 </div>
-                <div className="text-xl text-center md:text-lg sm:text-base">
+                <div className="text-base text-center md:text-base sm:text-base overflow-y-scroll relative">
                   {flashcards[currentPage].answer}
                 </div>
               </div>
