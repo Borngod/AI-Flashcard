@@ -5,10 +5,10 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "AI flashacard Generator",
+  title: "AI Flashcard Generator",
   description: "Learn smarter, not harder. Turn any text or PDF into interactive flashcards instantly",
   icons: {
-    icon: '/public/flash-card.png', // /public path
+    icon: '/icon.png',
   },
 };
 

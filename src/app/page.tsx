@@ -4,7 +4,6 @@ import LoginSignupModal from "./components/LoginSignupModal";
 import Typewriter from "typewriter-effect"; // Import typewriter effect library
 
 export default function LandingPage() {
-  const [email, setEmail] = useState("");
   const [showPopup, setShowPopup] = useState(false);
 
   const handleSubmit = () => {
